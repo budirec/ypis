@@ -22,5 +22,42 @@ model User {
   password  String
   role      Role     @default(STAFF)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt             DateTime               @updatedAt
+  inventoryTransactions InventoryTransaction[]
 }
+
+enum ItemType {
+  RAW_MATERIAL
+  FINISHED_GOOD
+}
+
+enum TransactionType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+model InventoryItem {
+  id           String                 @id @default(uuid())
+  sku          String                 @unique // e.g., SOY-001, TMP-001
+  name         String                 // "Soybeans", "Rice Flour", "Yeast", "Tempeh"
+  type         ItemType
+  quantity     Float                  @default(0)
+  unit         String                 // "kg", "g", "packs", etc.
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  transactions InventoryTransaction[]
+}
+
+model InventoryTransaction {
+  id              String          @id @default(uuid())
+  inventoryItemId String
+  inventoryItem   InventoryItem   @relation(fields: [inventoryItemId], references: [id])
+  type            TransactionType
+  quantity        Float           // The delta (amount added or removed)
+  notes           String?
+  userId          String?         // Track who made the change
+  user            User?           @relation(fields: [userId], references: [id])
+  createdAt       DateTime        @default(now())
+}
+

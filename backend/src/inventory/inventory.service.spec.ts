@@ -1,24 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { InventoryService } from './inventory.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
 
-describe('AuthService', () => {
-  let service: AuthService;
+describe('InventoryService', () => {
+  let service: InventoryService;
 
   const mockPrismaService = {};
-  const mockJwtService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthService,
-        { provide: PrismaService, useValue: mockPrismaService },
-        { provide: JwtService, useValue: mockJwtService },
+        InventoryService,
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
+        },
       ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    service = module.get<InventoryService>(InventoryService);
   });
 
   it('should be defined', () => {

@@ -30,7 +30,7 @@ export function LoginForm() {
       router.push("/");
       router.refresh();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       setErrorMsg(error.message);
     },
   });
